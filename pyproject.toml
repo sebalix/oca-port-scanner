@@ -1,0 +1,49 @@
+[project]
+name = "oca-port-scanner"
+authors = [
+    {name = "Odoo Community Association (OCA)"},
+    {name = "Sébastien Alix", email="sebastien.alix@camptocamp.com"}
+]
+description = "Scan OCA repositories and expose migration data through an API."
+readme = "README.md"
+keywords = ["odoo", "oca", "port", "migration", "modules", "addons"]
+license = {file = "LICENSE"}
+classifiers = [
+    "License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)",
+    "Programming Language :: Python :: 3",
+    "Framework :: Odoo",
+]
+dependencies = [
+    "fastapi",
+    "schedule<=1.2.0",
+    "gitpython<=3.1.32",
+    "oca-port @ git+https://github.com/OCA/oca-port.git@refs/pull/26/head",
+]
+requires-python = ">=3.10"
+dynamic = ["version"]
+
+[project.urls]
+homepage = "https://github.com/sebalix/oca-port-scanner"
+documentation = "https://github.com/sebalix/oca-port-scanner"
+repository = "https://github.com/sebalix/oca-port-scanner"
+
+[project.scripts]
+oca-port-scanner = "oca_port_scanner.scanner:main"
+
+[project.optional-dependencies]
+test = [
+  "pytest",
+]
+
+[build-system]
+requires = ["setuptools>=64", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages]
+find = {}
+
+[tool.setuptools_scm]
+
+[tool.black]
+line-length = 79
+skip-string-normalization = "True"
