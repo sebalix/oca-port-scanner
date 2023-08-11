@@ -1,6 +1,7 @@
 # Copyright 2023 Camptocamp SA
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl)
 
+from datetime import datetime, timedelta
 import logging
 import signal
 import time
@@ -9,6 +10,7 @@ import sys
 
 import schedule
 
+from .exceptions import PostponeError
 from .repo import Repo
 from .storage import Storage
 
@@ -58,6 +60,15 @@ class App:
         logger.info("Started")
         handler = SignalHandler()
         while True:
-            schedule.run_pending()
-            time.sleep(1)
+            seconds = 1
+            try:
+                schedule.run_pending()
+            except PostponeError as exc:
+                # Postpone the next call of the scheduler to later
+                message = exc.args[0]
+                seconds = exc.args[1]
+                next_call = datetime.now() + timedelta(seconds=seconds)
+                logger.error(message)
+                logger.warning("Next scheduler call planned at %s", next_call)
+            time.sleep(seconds)
         logger.info("Stopped")

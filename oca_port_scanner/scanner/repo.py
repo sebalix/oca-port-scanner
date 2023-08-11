@@ -8,6 +8,8 @@ import time
 import git
 import oca_port
 
+from .exceptions import PostponeError
+
 
 logger = logging.getLogger(__name__)
 
@@ -68,7 +70,14 @@ class Repo:
             "fetch": False,
         }
         scan = oca_port.App(**params)
-        json_data = scan.run()
+        try:
+            json_data = scan.run()
+        except RuntimeError as exc:
+            if "limit exceeded" in exc.args[0]:
+                # GitHub API rate limit exceeded, postpone the next call in 1h
+                # https://docs.github.com/rest/overview/resources-in-the-rest-api
+                raise PostponeError(exc.args[0], 60*60) from exc
+            raise RuntimeError
         return json.loads(json_data)
 
     def _store_scan_module_data(self, module, from_branch, to_branch, data):
