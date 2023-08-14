@@ -14,7 +14,9 @@ classifiers = [
     "Framework :: Odoo",
 ]
 dependencies = [
-    "fastapi",
+    "fastapi<0.102",
+    "jinja2<3.2",
+    "python-multipart<=0.0.6",
     "schedule<=1.2.0",
     "gitpython<=3.1.32",
     "oca-port @ git+https://github.com/OCA/oca-port.git@refs/pull/26/head",

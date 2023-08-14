@@ -8,11 +8,13 @@ import sqlite3
 class Backend:
     """Manage the SQLite3 database."""
 
-    def __init__(self, config):
+    def __init__(self, config, check_same_thread=True):
         self.config = config
         self.db_path = pathlib.Path(self.config["options"]["database_path"])
         self.db_path.parent.mkdir(parents=True, exist_ok=True)
-        self.db = sqlite3.connect(self.db_path)
+        self.db = sqlite3.connect(
+            self.db_path, check_same_thread=check_same_thread
+        )
         self._init_db()
 
     def _init_db(self):

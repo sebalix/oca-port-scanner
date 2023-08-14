@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="description" content="FastAPI framework, high performance, easy to learn, fast to code, ready for production">
+        <title>OCA-Port Scanner</title>
+    </head>
+    <body style="margin: 0; font-family: 'Ubuntu', 'Odoo Unicode Support Noto', sans-serif;">
+        <div style="background-color: #2A3443; color: #F2F5F9; height: 10em;">
+        <h1 style="margin: 0;">OCA-Port Scanner</h1>
+        </div>
+        <p>Generate a report regarding the migration status of OCA modules.</p>
+        <p>Modules not found (or that are not part of OCA) will be added at the end of the report as 'to migrate'.</p>
+        <form action="/report" method="post">
+            <label for="versions">Choose a migration path:</label>
+            <select name="versions" id="versions">
+                {%- for version in versions %}
+                <option value="{{','.join(version)}}">{{version[0]}} -&gt; {{version[1]}}</option>
+                {% endfor %}
+            </select>
+            <br/>
+            <br/>
+            <textarea
+                name="modules"
+                rows=20 cols=80
+                placeholder="Copy/paste the list of modules you want to analyze.
+Modules can be separated by space, tabulation, ',' or ';' characters.
+"></textarea>
+            <p><strong>NOTE:</strong> user's data are not stored on the server.</p>
+            <input type="submit" value="Submit">
+        </form>
+        <footer>
+            <ul>
+                <li>Project: <a href="https://github.com/sebalix/oca-port-scanner">sebalix/oca-port-scanner</a></li>
+                <li>Based on: <a href="https://github.com/OCA/oca-port">OCA/oca-port</a></li>
+            </ul>
+            <img src="/static/oca-community-logo.png"/>
+        </footer>
+    </body>
+</html>
